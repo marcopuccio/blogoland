@@ -48,8 +48,6 @@ def post_content(context):
     """
     Check if the given instance wrapped in the context is a Post one. Then 
     parse the content of the post to HTML.
-    
-    EX: {% page_content %}
     """
     try:
         post = context['object']
@@ -62,7 +60,7 @@ def post_content(context):
 @register.simple_tag(takes_context=True)
 def detail_image(context):
     """
-    Render the first detail image of the Page
+    Render the first detail image of the Post
     """
     try:
         obj = context['object']
@@ -75,7 +73,7 @@ def detail_image(context):
 @register.simple_tag(takes_context=True)
 def thumbnail_image(context):
     """
-    Render the first thumbnail image of the Page
+    Render the first thumbnail image of the Post
     """
     try:
         obj = context['object']
