@@ -2,7 +2,7 @@
 from django import template
 from django.conf import settings
 from django.utils.html import format_html, mark_safe, strip_tags
-from django.utils.text import capfirst
+from django.utils.text import capfirst, Truncator
 
 from blogoland.confs import DEFAULT_DATE_FORMAT
 from blogoland.models import Post
@@ -57,6 +57,15 @@ def post_content(context):
         return ''
 
 @register.simple_tag(takes_context=True)
+def post_excerpt(context, word_limit=10):
+    """
+    Returns the excerpt of the post. Strips the HTML tags and truncate the
+    words by the given limit.
+    """
+    post = context['object']
+    return Truncator(strip_tags(post.content)).words(word_limit)
+
+@register.simple_tag(takes_context=True)
 def post_detail_image(context):
     """
     Render the first detail image of the Post
@@ -92,3 +101,10 @@ def get_post_gallery_images(context):
         return post.image_set.filter(img_type='gallery')
     except:
         return []
+
+@register.simple_tag
+def get_latest_posts(post_limit=None):
+    """
+    Returns a Qs of the latest public post sliced by limit.
+    """
+    return Post.objects.get_public_posts()[:post_limit]
