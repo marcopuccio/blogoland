@@ -1,7 +1,7 @@
 # *-* coding=utf-8 *-*
 from django import template
 from django.conf import settings
-from django.utils.html import format_html, strip_tags
+from django.utils.html import format_html, mark_safe, strip_tags
 from django.utils.text import capfirst
 
 from blogoland.confs import DEFAULT_DATE_FORMAT
@@ -16,9 +16,9 @@ def build_img_tag(img):
     """
     Build a HTML Img TAG with the given img object.
     """
+
     img_tag = '<img src="{0}" alt="{1}" />'.format(img.image.url, img.title)
     return mark_safe(img_tag)
-
 
 @register.simple_tag(takes_context=True)
 def post_title(context):    
@@ -56,40 +56,39 @@ def post_content(context):
     except: 
         return ''
 
-
 @register.simple_tag(takes_context=True)
-def detail_image(context):
+def post_detail_image(context):
     """
     Render the first detail image of the Post
     """
     try:
-        obj = context['object']
-        img = obj.image_set.filter(img_type='detail').first()
+        post = context['object']
+        img = post.image_set.filter(img_type='detail').first()
         img_tag = build_img_tag(img)
         return img_tag
     except:
         return
 
 @register.simple_tag(takes_context=True)
-def thumbnail_image(context):
+def post_thumbnail_image(context):
     """
     Render the first thumbnail image of the Post
     """
     try:
-        obj = context['object']
-        img = obj.image_set.filter(img_type='thumbnail').first()
+        post = context['object']
+        img = post.image_set.filter(img_type='thumbnail').first()
         img_tag = build_img_tag(img)
         return img_tag
     except:
         return
 
 @register.simple_tag(takes_context=True)
-def get_gallery_images(context):
+def get_post_gallery_images(context):
     """
     Returns a list of img related objects selected as 'gallery'
     """
     try:
-        obj = context['object']
-        return obj.image_set.filter(img_type='gallery')
+        post = context['object']
+        return post.image_set.filter(img_type='gallery')
     except:
         return []
