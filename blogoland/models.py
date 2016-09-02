@@ -9,7 +9,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import strip_tags
 from django.utils.text import slugify
 
-from blogoland.managers import PostManager
+from blogoland.managers import PostManager, PostImageManager
 
 TODAY = datetime.date.today
 
@@ -136,6 +136,8 @@ class PostImage(models.Model):
     img_type =  models.CharField('Image Type', max_length=255, choices=IMG_TYPE_CHOICES, blank=True, null=True)
     image = models.ImageField(upload_to=get_image_path, max_length=255)
     post = models.ForeignKey(Post, related_name='image_set')
+
+    objects = PostImageManager()
 
     class Meta:
         verbose_name = 'Image'

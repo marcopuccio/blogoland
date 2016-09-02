@@ -1,6 +1,7 @@
 # *-* coding=utf-8 *-*
 from django import template
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.utils.html import format_html, mark_safe, strip_tags
 from django.utils.text import capfirst, Truncator
 
@@ -72,7 +73,7 @@ def post_detail_image(context):
     """
     try:
         post = context['object']
-        img = post.image_set.filter(img_type='detail').last()
+        img = post.image_set.get_last_img_type('detail')
         img_tag = build_img_tag(img)
         return img_tag
     except:
@@ -85,7 +86,7 @@ def post_thumbnail_image(context):
     """
     try:
         post = context['object']
-        img = post.image_set.filter(img_type='thumbnail').last()
+        img = post.image_set.get_last_img_type('thumbnail')
         img_tag = build_img_tag(img)
         return img_tag
     except:
@@ -115,3 +116,28 @@ def get_category_list(cat_limit=None):
     Return a QuerySet of Category object and can be sliced by limit.
     """
     return Category.objects.all()[:cat_limit]
+
+@register.simple_tag(takes_context=True)
+def social_media_image_url(context):
+    """
+    Returns the thumbnail URL built to be used in Open Graph tags.
+    """
+    site = Site.objects.get_current()
+    try:
+        post = context['object']
+        img = post.image_set.get_last_img_type('thumbnail')
+        return 'http://{0}{1}'.format(site.domain, img.image.url)
+    except:
+        return
+
+@register.simple_tag(takes_context=True)
+def social_media_post_url(context):
+    """
+    Returns the post's URL built to be used on Open Graph and Twitter Card.
+    """
+    site = Site.objects.get_current()
+    try:
+        post = context['object']
+        return 'http://{0}{1}'.format(site.domain, post.get_absolute_url())
+    except:
+        return
