@@ -72,7 +72,7 @@ def post_detail_image(context):
     """
     try:
         post = context['object']
-        img = post.image_set.filter(img_type='detail').first()
+        img = post.image_set.filter(img_type='detail').last()
         img_tag = build_img_tag(img)
         return img_tag
     except:
@@ -85,7 +85,7 @@ def post_thumbnail_image(context):
     """
     try:
         post = context['object']
-        img = post.image_set.filter(img_type='thumbnail').first()
+        img = post.image_set.filter(img_type='thumbnail').last()
         img_tag = build_img_tag(img)
         return img_tag
     except:
