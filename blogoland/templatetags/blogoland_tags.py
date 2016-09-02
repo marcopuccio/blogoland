@@ -5,7 +5,7 @@ from django.utils.html import format_html, mark_safe, strip_tags
 from django.utils.text import capfirst, Truncator
 
 from blogoland.confs import DEFAULT_DATE_FORMAT
-from blogoland.models import Post
+from blogoland.models import Post, Category
 
 register = template.Library()
 
@@ -108,3 +108,10 @@ def get_latest_posts(post_limit=None):
     Returns a Qs of the latest public post sliced by limit.
     """
     return Post.objects.get_public_posts()[:post_limit]
+
+@register.simple_tag
+def get_category_list(cat_limit=None):
+    """
+    Return a QuerySet of Category object and can be sliced by limit.
+    """
+    return Category.objects.all()[:cat_limit]
