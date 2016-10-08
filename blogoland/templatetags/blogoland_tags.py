@@ -141,3 +141,11 @@ def social_media_post_url(context):
         return 'http://{0}{1}'.format(site.domain, post.get_absolute_url())
     except:
         return
+
+@register.inclusion_tag('blogoland/snippets/paginator.html', takes_context=True)
+def paginator(context):
+    """
+    Template tag to easy including the pagination in template. This tag, only
+    pass the context to the default template.
+    """
+    return context

@@ -48,13 +48,25 @@ class PostAdmin(SummernoteModelAdmin):
             'id',
             'title',
             'slug',
+            'publication_date',
             'is_public',
             'is_visible',
-            'publication_date',
+            'get_post_categories'
             )
     list_display_links = ('id', 'title',)
-    list_filter = ('publication_date', 'is_visible',  'creation_date',)
+    list_filter = (
+        'publication_date',
+        'category',
+        'is_visible',
+        'creation_date',
+        )
     search_fields = ['title', 'pk']
+
+    def get_post_categories(self, post):
+        """
+        Returns a joined string of post categories to be rendered in admin.
+        """
+        return ", ".join([cat.title for cat in post.category.all()])
 
 @admin.register(Category)
 class CategoryAdmin(SummernoteModelAdmin):
