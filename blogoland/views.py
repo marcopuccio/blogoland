@@ -5,10 +5,11 @@ from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 from django.views.generic.list import MultipleObjectMixin
 
+from blogoland.confs import DEFAULT_PAGINATION
 from blogoland.models import Post, Category
 
 
-PAGINATION = getattr(settings, 'BLOGOLAND_PAGINATION', 12)
+PAGINATION = getattr(settings, 'BLOGOLAND_PAGINATION', DEFAULT_PAGINATION)
 
 
 class PostListView(ListView):

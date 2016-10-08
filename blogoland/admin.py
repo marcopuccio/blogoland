@@ -68,6 +68,7 @@ class PostAdmin(SummernoteModelAdmin):
         """
         return ", ".join([cat.title for cat in post.category.all()])
 
+
 @admin.register(Category)
 class CategoryAdmin(SummernoteModelAdmin):
     """
