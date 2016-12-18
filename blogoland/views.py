@@ -1,9 +1,7 @@
 # -*- coding:utf8 -*-
 from django.conf import settings
 from django.http import Http404
-from django.shortcuts import render
 from django.views.generic import DetailView, ListView
-from django.views.generic.list import MultipleObjectMixin
 
 from blogoland.confs import DEFAULT_PAGINATION
 from blogoland.models import Post, Category
@@ -12,12 +10,26 @@ from blogoland.models import Post, Category
 PAGINATION = getattr(settings, 'BLOGOLAND_PAGINATION', DEFAULT_PAGINATION)
 
 
-class PostListView(ListView):
+class PaginatedListView(ListView):
+    """
+    Paginated base view
+    """
+    paginate_by = PAGINATION
+
+    def get_context_data(self, **kwargs):
+        """
+        Adds the category object to the context.
+        """
+        context = super(PaginatedListView, self).get_context_data(**kwargs)
+        context['blogoland_pagination'] = self.paginate_by
+        return context
+
+
+class PostListView(PaginatedListView):
     """
     List the Post model.
     """
     model = Post
-    paginate_by = PAGINATION
 
     def get_queryset(self, *args, **kwargs):
         """
@@ -33,7 +45,7 @@ class PostListView(ListView):
         """
         return [
                 "blogoland/post_list.html",
-                ] 
+                ]
 
 
 class PostDetailView(DetailView):
@@ -49,7 +61,7 @@ class PostDetailView(DetailView):
         if self.request.user.is_staff:
             return Post.objects.all()
         return Post.objects.get_public_posts()
-    
+
     def get_object(self):
         """
         Returns the Post detail by the given slug requestself.
@@ -69,16 +81,15 @@ class PostDetailView(DetailView):
         return [
                 "blogoland/post_{0}.html".format(self.kwargs.get('post_slug')),
                 "blogoland/post_detail.html",
-                ] 
-  
+                ]
 
-class CategoryPostListView(ListView):
+
+class CategoryPostListView(PaginatedListView):
     """
-    Returns the Detail of Category and the QuerySet of Posts related to 
+    Returns the Detail of Category and the QuerySet of Posts related to
     Category and filter if user is or not logged in admin.
     """
     model = Post
-    paginate_by = PAGINATION
 
     def get_queryset(self, *args, **kwargs):
         """
@@ -116,4 +127,4 @@ class CategoryPostListView(ListView):
         return [
                 "blogoland/category_{0}_list.html".format(self.kwargs.get('category_slug')),
                 "blogoland/category_post_list.html",
-                ] 
+                ]
