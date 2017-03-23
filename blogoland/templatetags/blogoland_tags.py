@@ -12,6 +12,7 @@ register = template.Library()
 
 DATE_FORMAT = getattr(settings, 'BLOGOLAND_DATE_FORMAT', DEFAULT_DATE_FORMAT)
 
+
 # Helper function
 def build_img_tag(img):
     """
@@ -21,8 +22,9 @@ def build_img_tag(img):
     img_tag = '<img src="{0}" alt="{1}" />'.format(img.image.url, img.title)
     return mark_safe(img_tag)
 
+
 @register.simple_tag(takes_context=True)
-def post_title(context):    
+def post_title(context):
     """
     Returns the title with capfirst filter applied. If post isn't public
     this tag will append a '[DRAFT]' string and output the final title.
@@ -31,18 +33,20 @@ def post_title(context):
     title = capfirst(post.title)
 
     if not post.is_public():
-        title = '[DRAFT] %s' % title 
+        title = '[DRAFT] %s' % title
 
     return title
-    
+
+
 @register.simple_tag(takes_context=True)
 def post_date(context):
     """
-    Returns the formated date. 
+    Returns the formated date.
     Default: '%d-%m-%Y'
     """
     post = context['object']
     return post.publication_date.strftime(DATE_FORMAT)
+
 
 @register.simple_tag(takes_context=True)
 def post_content(context):
@@ -54,8 +58,9 @@ def post_content(context):
         post = context['object']
         if isinstance(post, Post):
             return format_html(post.content)
-    except: 
+    except:
         return ''
+
 
 @register.simple_tag(takes_context=True)
 def post_excerpt(context, word_limit=10):
@@ -65,6 +70,7 @@ def post_excerpt(context, word_limit=10):
     """
     post = context['object']
     return Truncator(strip_tags(post.content)).words(word_limit)
+
 
 @register.simple_tag(takes_context=True)
 def post_detail_image(context):
@@ -77,7 +83,8 @@ def post_detail_image(context):
         img_tag = build_img_tag(img)
         return img_tag
     except:
-        return
+        return ''
+
 
 @register.simple_tag(takes_context=True)
 def post_thumbnail_image(context):
@@ -90,7 +97,8 @@ def post_thumbnail_image(context):
         img_tag = build_img_tag(img)
         return img_tag
     except:
-        return
+        return ''
+
 
 @register.simple_tag(takes_context=True)
 def get_post_gallery_images(context):
@@ -103,6 +111,7 @@ def get_post_gallery_images(context):
     except:
         return []
 
+
 @register.simple_tag
 def get_latest_posts(post_limit=None):
     """
@@ -110,12 +119,14 @@ def get_latest_posts(post_limit=None):
     """
     return Post.objects.get_public_posts()[:post_limit]
 
+
 @register.simple_tag
 def get_category_list(cat_limit=None):
     """
     Return a QuerySet of Category object and can be sliced by limit.
     """
     return Category.objects.all()[:cat_limit]
+
 
 @register.simple_tag(takes_context=True)
 def social_media_image_url(context):
@@ -130,6 +141,7 @@ def social_media_image_url(context):
     except:
         return
 
+
 @register.simple_tag(takes_context=True)
 def social_media_post_url(context):
     """
@@ -141,6 +153,7 @@ def social_media_post_url(context):
         return 'http://{0}{1}'.format(site.domain, post.get_absolute_url())
     except:
         return
+
 
 @register.inclusion_tag('blogoland/snippets/paginator.html', takes_context=True)
 def paginator(context):
