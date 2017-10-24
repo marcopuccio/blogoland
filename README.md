@@ -1,12 +1,11 @@
 # Blogoland
 Just another Django Blog app.
 
-<br>
 ## Requirements
 
 Blogoland is developed and require Django>=1.9, pillow, Python > 2.7 and django-summernote.
 
-<br>
+
 ## How to install it
 
 It can be installed via pip running the next command.
@@ -41,7 +40,6 @@ Finally, run the migration executing ```python manage.py migrate```
 
 **Congrats, it's ready!***
 
-<br>
 ## Settings
 
 You can set some variables in your Django *settings* file to modify custom behavior of this package.
@@ -50,7 +48,7 @@ You can set some variables in your Django *settings* file to modify custom behav
 
 ```BLOGOLAND_DATE_FORMAT```: Alter the date representation(default=```'%d-%m-%Y'```). Used to nice render the date in templates. 
  
-<br>
+
 ## Default URLs and Views
 
 |      View name      |URL                           | Args   |
@@ -59,7 +57,7 @@ You can set some variables in your Django *settings* file to modify custom behav
 |`post_detail`        |`/<post_slug>/`               |String  |
 |`category_post_list` |`/category/<category_slug>/`  |String  |
 
-<br>
+
 ***POST_LIST***
 
 Returns the list of public posts. This QuerySet is paginated(Default=15 post).
@@ -68,7 +66,7 @@ Template name:
 ```
 "blogoland/post_list.html"
 ```
-<br>
+
 ***POST_DETAIL***
 
 Returns the Detail of the Post.
@@ -78,7 +76,7 @@ Templates Hierarchy:
 "blogoland/post_<post_slug>.html"
 "blogoland/post_detail.html"
 ```
-<br>
+
 ***CATEGORY_POST_LIST***
 
 Returns the detail of the category and a list of Posts related to a it.The post QuerySet is paginated(Default=15 post). 
@@ -89,7 +87,7 @@ Templates Hierarchy:
 "blogoland/category_post_list.html"
 ```
 
-<br>
+
 ## Template tags
 
 *comming soon...*
